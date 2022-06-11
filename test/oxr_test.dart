@@ -33,6 +33,15 @@ void main() {
             'rates': {'AED': 3.672914, 'AFN': 48.337601, 'ALL': 111.863334}
           });
       }
+      if (request.uri.path == '/api/currencies.json') {
+        return MockResponse()
+          ..httpCode = HttpStatus.ok
+          ..body = jsonEncode({
+            "AED": "United Arab Emirates Dirham",
+            "AFN": "Afghan Afghani",
+            "ALL": "Albanian Lek",
+          });
+      }
 
       return MockResponse()..httpCode = HttpStatus.notFound;
     }
@@ -73,6 +82,18 @@ void main() {
       expect(historical.rates['AED'], 3.672914);
       expect(historical.rates['AFN'], 48.337601);
       expect(historical.rates['ALL'], 111.863334);
+    });
+
+    test('Get currecies list', () async {
+      var currencies = await oxr.getCurrencies();
+
+      expect(currencies, (v) => v != null);
+
+      expect(currencies, (Map<String, String> v) => v.isNotEmpty);
+
+      expect(currencies!['AED'], "United Arab Emirates Dirham");
+      expect(currencies['AFN'], "Afghan Afghani");
+      expect(currencies['ALL'], "Albanian Lek");
     });
   });
 }

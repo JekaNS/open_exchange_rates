@@ -15,7 +15,7 @@ class Oxr {
   String endpoint;
   Map<String, String> headers = {};
 
-  QueryParams getParams({String? base, String? symbols, bool prettyPrint = true, bool showAlternative = false}) =>
+  QueryParams getParams({String? base, String? symbols, bool prettyPrint = true, bool showAlternative = false, bool showInactive = false}) =>
       QueryParams(base: base, symbols: symbols, prettyPrint: prettyPrint, showAlternative: showAlternative);
 
   Oxr(this.apiKey, {this.endpoint = defaultApiEndpoint}) {
@@ -45,6 +45,17 @@ class Oxr {
       historical = Rates.fromJson(jsonDecode(response.body));
     }
     return historical;
+  }
+
+  Future<Map<String, String>?> getCurrencies({bool prettyPrint = true, bool showAlternative = false, bool showInactive = false}) async {
+    Map<String, String>? currencies;
+    var uri = UriTemplate('$endpoint/api/currencies.json{?prettyprint,show_alternative,show_inactive}')
+        .expand(getParams(prettyPrint: prettyPrint, showAlternative: showAlternative, showInactive: showInactive).toJson());
+    var response = await _get(uri);
+    if (response.statusCode == HttpStatus.ok) {
+      currencies = jsonDecode(response.body).map<String, String>((key, value) => MapEntry<String, String>(key, value));
+    }
+    return currencies;
   }
 
   Future<http.Response> _get(String url) async {
