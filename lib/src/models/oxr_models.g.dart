@@ -11,6 +11,7 @@ QueryParams _$QueryParamsFromJson(Map<String, dynamic> json) => QueryParams(
       symbols: json['symbols'] as String?,
       prettyPrint: json['prettyprint'] as bool? ?? true,
       showAlternative: json['show_alternative'] as bool? ?? false,
+      showInactive: json['show_inactive'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$QueryParamsToJson(QueryParams instance) =>
@@ -19,6 +20,7 @@ Map<String, dynamic> _$QueryParamsToJson(QueryParams instance) =>
       'symbols': instance.symbols,
       'prettyprint': instance.prettyPrint,
       'show_alternative': instance.showAlternative,
+      'show_inactive': instance.showInactive,
     };
 
 Rates _$RatesFromJson(Map<String, dynamic> json) => Rates(
